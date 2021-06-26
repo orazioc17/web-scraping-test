@@ -1,0 +1,5 @@
+El proceso es automatico, lo primero seria crear un virtual environment con python3 -m venv venv (o py si es en windows).
+Luego, activar el entorno virtual.
+Con el entorno virtual activado, instalar las dependencias de python necesarias con el comando "pip install -r requirements.txt"
+Ya con las dependencias activadas, correr el programa con "python3 scraper.py" (o py scraper.py en windows).
+El programa automaticamente obtendra los datos requeridos de la pagina pautada, guardara los datos en un archivo json y mostrara los datos obtenidos en la visita actual, si se quieren ver todas las consultas a la pagina, consulte el archivo json.
