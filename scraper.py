@@ -8,7 +8,7 @@ import lxml.html as html
 import json
 
 # Constants created in another file
-from constants import HOME_URL,XPATH_BITCOIN_PAGE, XPATH_NODES, VALUES_LIST, SAVED_JSON, TEMPORARY_JSON
+from constants import HOME_URL, XPATH_BITCOIN_PAGE, XPATH_NODES, VALUES_LIST, SAVED_JSON, TEMPORARY_JSON
 
 
 # Menu to select an option
@@ -23,7 +23,7 @@ Please, select an option
 2) Show the saved scraped data (if it exists)
 3) Exit
 """
-)
+          )
 
     # Validating option
     while True:
@@ -65,7 +65,8 @@ def save_data(data, time):
     actual_dir = os.listdir(pathlib.Path.cwd())
 
     # Gets the actual json if it exists, then write the old data with the new data
-    # In another file, delete the older and rename the new, so it "overwrite" the original file
+    # In another file, delete the older and rename the new, so it "overwrite"
+    # the original file
     if SAVED_JSON in actual_dir:
         with open(SAVED_JSON, 'r') as f:
 
@@ -81,7 +82,7 @@ def save_data(data, time):
 
                 os.remove(SAVED_JSON)
                 os.rename(TEMPORARY_JSON, SAVED_JSON)
-            
+
     else:
         with open(SAVED_JSON, 'w') as f:
             data_to_save = {}
@@ -101,13 +102,16 @@ def parse_bitcoin(link):
             bitcoin_page = response.content.decode('utf-8')
             parsed = html.fromstring(bitcoin_page)
             data = dict()
-            data['Obtained'] = datetime.datetime.now().strftime('Day: %d-%m-%Y Hour: %H:%M:%S')
+            data['Obtained'] = datetime.datetime.now().strftime(
+                'Day: %d-%m-%Y Hour: %H:%M:%S')
             # Using Values list to create every value in the dictionary
             for index, value in enumerate(VALUES_LIST):
-                # Converting from lists to string every text found and inserting them into the dict
+                # Converting from lists to string every text found and
+                # inserting them into the dict
                 data[value] = convert_array(parsed.xpath(XPATH_NODES[index]))
             # Saving the time this  data was obtained
-            data['Obtained'] = datetime.datetime.now().strftime('Day: %d-%m-%Y Hour: %H:%M:%S')
+            data['Obtained'] = datetime.datetime.now().strftime(
+                'Day: %d-%m-%Y Hour: %H:%M:%S')
             return data
         else:
             raise ValueError(f'Error: {response.status_code}')
