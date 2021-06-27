@@ -1,4 +1,9 @@
+import os
+import pathlib
+
 HOME_URL = 'https://coinmarketcap.com/'
+SAVED_JSON = 'Bitcoin.json'
+TEMPORARY_JSON = 'bitcoin-temp.json'
 
 XPATH_BITCOIN_PAGE = '//tr[1]/td[3]/div/a/@href'
 XPATH_BITCOIN_PRICE = '//div[2]/div[2]/div/div[1]/table/tbody/tr[1]/td/text()'

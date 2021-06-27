@@ -1,12 +1,14 @@
 # Python dependencies
+import pathlib
 import datetime
-from os import close
+from os import close, path
+import os
 import requests
 import lxml.html as html
 import json
 
 # Constants created in another file
-from constants import HOME_URL,XPATH_BITCOIN_PAGE, XPATH_NODES, VALUES_LIST
+from constants import HOME_URL,XPATH_BITCOIN_PAGE, XPATH_NODES, VALUES_LIST, SAVED_JSON, TEMPORARY_JSON
 
 
 # Function to convert from list to string
@@ -19,12 +21,36 @@ def print_json(data):
     print(f'Data obtained: {json.dumps(data, indent=4)}')
 
 
-# Adds the data to the json file
 def save_data(data, time):
-    """Function to save the data in json format"""
-    with open(f'{time}.json', 'a') as f:
-        json.dump(data, f, indent=4)
-        f.close()
+    """"Overwrite json if exists or create it"""
+    actual_dir = os.listdir(pathlib.Path.cwd())
+
+    # Gets the actual json if it exists, then write the old data with the new data
+    # In another file, delete the older and rename the new, so it "overwrite" the original file
+    if SAVED_JSON in actual_dir:
+        with open(SAVED_JSON, 'r') as f:
+
+            saved_data = json.load(f)
+            f.close()
+
+            data_to_save = saved_data
+            data_to_save['values'].append({f'{time}': data})
+
+            with open(TEMPORARY_JSON, 'w') as file:
+                json.dump(data_to_save, file, indent=4)
+                file.close()
+
+                os.remove(SAVED_JSON)
+                os.rename(TEMPORARY_JSON, SAVED_JSON)
+            
+    else:
+        with open(SAVED_JSON, 'w') as f:
+            data_to_save = {}
+            data_to_save['asset'] = 'BTC'
+            data_to_save['values'] = []
+            data_to_save['values'].append({f'{time}': data})
+            json.dump(data_to_save, f, indent=4)
+            f.close()
 
 
 # Obtaining every value from bitcoing page
@@ -68,6 +94,7 @@ def parse_home():
 
 
 def run():
+    """Controls the flow of the program"""
     link_to_bitcoin_page = parse_home()
     data = parse_bitcoin(link_to_bitcoin_page)
     print_json(data)
