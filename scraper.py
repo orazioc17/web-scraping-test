@@ -17,7 +17,7 @@ def menu():
     print(f"""
 ########## Welcome to the bitcoin scraper!##########
 
-Please, select an option typing its number
+Please, select an option
 
 1) Get data from {HOME_URL}
 2) Show the saved scraped data (if it exists)
